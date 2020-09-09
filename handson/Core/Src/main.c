@@ -104,8 +104,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-    HAL_Delay(200);
+    uint8_t c;
+    HAL_UART_Receive(&huart3, &c, 1, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart3, &c, 1, HAL_MAX_DELAY);
 
     /* USER CODE END WHILE */
 
