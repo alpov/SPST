@@ -98,10 +98,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+/*
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 	  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
 	  HAL_Delay(200);
+*/
+	  uint8_t c;
+	  HAL_UART_Receive(&huart2, &c, 1, HAL_MAX_DELAY);
+	  HAL_UART_Transmit(&huart2, &c, 1, HAL_MAX_DELAY);
+
   }
   /* USER CODE END 3 */
 }
