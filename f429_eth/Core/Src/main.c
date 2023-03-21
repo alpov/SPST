@@ -73,12 +73,14 @@ void StartSerialTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
+void tcpecho_init(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-static void process_command(char *cmd, char *resp)
+void process_command(char *cmd, char *resp)
 {
 	char *token;
 	token = strtok(cmd, " ");
@@ -407,6 +409,10 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
+
+  /* Initialize tcp echo server */
+  tcpecho_init();
+
   /* Infinite loop */
   for(;;)
   {
