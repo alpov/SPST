@@ -35,11 +35,28 @@
 
 #if LWIP_NETCONN
 
+#include <string.h>
 #include "lwip/sys.h"
 #include "lwip/api.h"
 
 #define TCPECHO_THREAD_PRIO  ( tskIDLE_PRIORITY + 4 )
+#define CMD_BUFFER_LEN       256
 
+void process_command(char *cmd, char *resp);
+
+static void telnet_byte_available(uint8_t c, struct netconn *conn)
+{
+    static uint16_t cnt;
+    static char data[CMD_BUFFER_LEN], resp[CMD_BUFFER_LEN];
+
+    if (cnt < CMD_BUFFER_LEN && c >= 32 && c <= 127) data[cnt++] = c;
+    if ((c == '\n' || c == '\r') && cnt > 0) {
+        data[cnt] = '\0';
+        process_command(data, resp);
+        netconn_write(conn, resp, strlen(resp), NETCONN_COPY);
+        cnt = 0;
+    }
+}
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -80,7 +97,7 @@ static void tcpecho_thread(void *arg)
             do 
             {
               netbuf_data(buf, &data, &len);
-              netconn_write(newconn, data, len, NETCONN_COPY);
+              while (len--) telnet_byte_available(*(uint8_t*)data++, newconn);
           
             } 
             while (netbuf_next(buf) >= 0);
