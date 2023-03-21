@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include "lwip/apps/httpd.h"
 
 /* USER CODE END Includes */
 
@@ -412,6 +413,9 @@ void StartDefaultTask(void const * argument)
 
   /* Initialize tcp echo server */
   tcpecho_init();
+
+  /* Initialize HTTP server */
+  httpd_init();
 
   /* Infinite loop */
   for(;;)
